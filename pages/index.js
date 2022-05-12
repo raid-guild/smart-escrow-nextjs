@@ -1,5 +1,14 @@
 import { useContext, useState } from 'react';
-import { VStack, useToast, Box, Button, Text } from '@chakra-ui/react';
+import {
+  VStack,
+  useToast,
+  Box,
+  Button,
+  Text,
+  Flex,
+  Heading,
+  Link as ChakraLink
+} from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 
@@ -113,6 +122,40 @@ export default function Home() {
             </Button>
           </Link>
         ))}
+
+      <Flex
+        direction='column'
+        bgColor='white'
+        borderRadius='0.5rem'
+        p='0.5rem 1rem'
+        maxW='400px'
+      >
+        <Text
+          fontSize={{ base: '1rem', lg: '18px' }}
+          fontWeight='bold'
+          fontFamily={theme.fonts.spaceMono}
+          color='black'
+          mb='.5rem'
+        >
+          IMPORTANT
+        </Text>
+        <Text
+          fontSize={{ base: '1rem', lg: '16px' }}
+          fontFamily={theme.fonts.spaceMono}
+          color='black'
+        >
+          If you created an escrow prior to May 12, 2022, please use the older
+          version of the Smart Escrow:{' '}
+          <ChakraLink
+            href='https://smartescrow-legacy.raidguild.org'
+            isExternal
+            textDecoration='underline'
+            color='red'
+          >
+            smartescrow-legacy.raidguild.org
+          </ChakraLink>
+        </Text>
+      </Flex>
     </VStack>
   );
 }
