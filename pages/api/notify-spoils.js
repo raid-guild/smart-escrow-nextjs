@@ -12,7 +12,7 @@ const handler = async (req, res) => {
     let { token, raidPartyShare, guildShare, txLink } = req.body;
     try {
       const { data } = await axios.post(
-        `${process.env.DM_ENDPOINT}/escrow/notify-spoils`,
+        `${process.env.MINISTER_SENTRY_ENDPOINT}/escrow/notify-spoils`,
         {
           token,
           raidPartyShare,
