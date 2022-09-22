@@ -85,7 +85,11 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (context.account !== '') validateMembership(context.account);
+    if (context.account !== '') {
+      setInvoices([]);
+      setCurrentRecords([]);
+      validateMembership(context.account);
+    }
   }, [context.account]);
 
   useEffect(() => {
@@ -112,7 +116,7 @@ export default function Home() {
         </Text>
       )}
 
-      {!loading && (
+      {!loading && isMember && (
         <>
           <SimpleGrid columns='3' w='100%' my='2rem' gap='1rem'>
             {currentRecords.map((record, index) => {
