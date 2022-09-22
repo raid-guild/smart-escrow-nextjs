@@ -129,7 +129,7 @@ export const rpcUrls = {
   1: `https://mainnet.infura.io/v3/${INFURA_ID}`,
   4: `https://rinkeby.infura.io/v3/${INFURA_ID}`,
   42: `https://kovan.infura.io/v3/${INFURA_ID}`,
-  100: 'https://rpc.xdaichain.com'
+  100: 'https://rpc.gnosischain.com'
 };
 
 export const nativeSymbols = {
@@ -154,3 +154,5 @@ export const tokenInfo = {
 export const spoilsPercent = 10;
 
 export const INVOICE_VERSION = 'smart-escrow-v1';
+
+export const RAIDGUILD_DAO_MIN_SHARES = 100;
