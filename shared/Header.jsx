@@ -57,8 +57,7 @@ export const NavButton = ({ onClick, children }) => (
 );
 
 export const Header = () => {
-  const { account, chainID, disconnect, connectAccount } =
-    useContext(AppContext);
+  const { account, chainID, disconnect } = useContext(AppContext);
   const [isOpen, onOpen] = useState(false);
 
   const [profile, setProfile] = useState();
@@ -91,16 +90,10 @@ export const Header = () => {
           </Flex>
         </ChakraLink>
       </Box>
-
       <Flex align='center' height='8rem' transition='width 1s ease-out'>
-        <Link href='/invoices' passHref>
-          <Button variant='secondary' mr='1rem'>
-            All Invoices
-          </Button>
-        </Link>
         {account && (
           <Flex justify='center' align='center' zIndex={5}>
-            <Popover placement='bottom'>
+            <Popover placement='left'>
               <PopoverTrigger>
                 <Button
                   h='auto'
@@ -159,11 +152,15 @@ export const Header = () => {
           </Flex>
         )}
 
-        {account === '' && (
-          <Button w='200px' variant='primary' onClick={connectAccount}>
-            Connect Wallet
-          </Button>
-        )}
+        <Button
+          variant='secondary'
+          mr='1rem'
+          onClick={() =>
+            window.open('https://handbook.raidguild.org', '_blank')
+          }
+        >
+          Faq
+        </Button>
       </Flex>
     </Flex>
   );
