@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+export const allInvoices = async () => {
+  const { data } = await axios.post('/api/all-invoice');
+  return data;
+};
+
 export const validateRaidId = async (raidId) => {
   const { data } = await axios.post('/api/validate', { raidId });
   return data;

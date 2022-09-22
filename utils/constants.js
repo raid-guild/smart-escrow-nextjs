@@ -154,3 +154,5 @@ export const tokenInfo = {
 export const spoilsPercent = 10;
 
 export const INVOICE_VERSION = 'smart-escrow-v1';
+
+export const RAIDGUILD_DAO_MIN_SHARES = 100;
