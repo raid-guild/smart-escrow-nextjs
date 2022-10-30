@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react';
 import { Flex, Button, Text } from '@chakra-ui/react';
-import { utils } from 'ethers';
+import { ethers, utils } from 'ethers';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import Head from 'next/head';
 
 import { AppContext } from '../../context/AppContext';
 
@@ -17,7 +18,7 @@ import {
   getSmartInvoiceAddress,
   getRaidPartyAddress
 } from '../../utils/invoice';
-import { networkLabels } from '../../utils/constants';
+import { rpcUrls } from '../../utils/constants';
 import { Page404 } from '../../shared/Page404';
 
 export const getStaticPaths = async () => {
@@ -85,13 +86,26 @@ export const getStaticProps = async (context) => {
     }
   );
 
+  let invoice;
+  if (data.data.raid.invoice_address) {
+    let smartInvoice = await getSmartInvoiceAddress(
+      data.data.raid.invoice_address,
+      new ethers.providers.JsonRpcProvider(rpcUrls[100])
+    );
+    invoice = await getInvoice(100, smartInvoice);
+  }
+
   return {
-    props: { raid: data.data.raid },
+    props: {
+      raid: data.data.raid,
+      escrowValue: invoice.total,
+      terminationTime: invoice.terminationTime
+    },
     revalidate: 1
   };
 };
 
-export default function Escrow({ raid }) {
+export default function Escrow({ raid, escrowValue, terminationTime }) {
   const context = useContext(AppContext);
 
   const [invoice, setInvoice] = useState();
@@ -172,6 +186,20 @@ export default function Escrow({ raid }) {
 
   return (
     <Flex w='100%' h='100%' justifyContent='center'>
+      {invoice && (
+        <Head>
+          <title>{raid.raid_name}</title>
+          <meta
+            property='og:image'
+            content={`https://smart-escrow-nextjs-git-develop-raidguild.vercel.app/api/og?projectName=${
+              raid.raid_name
+            }&escrowValue=${utils.parseEther(
+              escrowValue
+            )}&safetyValveDate=${terminationTime}`}
+          />
+        </Head>
+      )}
+
       {validRaid ? (
         <>
           {context.account === '' && (
