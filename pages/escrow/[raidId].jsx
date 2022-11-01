@@ -196,7 +196,7 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
           <meta property='og:title' content={raid.raid_name} />
           <meta
             property='og:image'
-            content={`https://smart-escrow-nextjs-git-develop-manolingam.vercel.app/api/og?projectName=${
+            content={`https://smartescrow.raidguild.org/api/og?projectName=${
               raid.raid_name
             }&escrowValue=${Number(utils.formatEther(escrowValue)).toFixed(
               0
@@ -206,7 +206,7 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
           <meta name='twitter:title' content={raid.raid_name} />
           <meta
             name='twitter:image'
-            content={`https://smart-escrow-nextjs-git-develop-manolingam.vercel.app/api/og?projectName=${
+            content={`https://smartescrow.raidguild.org/api/og?projectName=${
               raid.raid_name
             }&escrowValue=${Number(utils.formatEther(escrowValue)).toFixed(
               0
