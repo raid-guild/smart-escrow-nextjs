@@ -87,12 +87,16 @@ export const getStaticProps = async (context) => {
   );
 
   let invoice;
-  if (data.data.raid.invoice_address) {
-    let smartInvoice = await getSmartInvoiceAddress(
-      data.data.raid.invoice_address,
-      new ethers.providers.JsonRpcProvider(rpcUrls[100])
-    );
-    invoice = await getInvoice(100, smartInvoice);
+  try {
+    if (data.data.raid.invoice_address) {
+      let smartInvoice = await getSmartInvoiceAddress(
+        data.data.raid.invoice_address,
+        new ethers.providers.JsonRpcProvider(rpcUrls[100])
+      );
+      invoice = await getInvoice(100, smartInvoice);
+    }
+  } catch (e) {
+    console.log(e);
   }
 
   return {
