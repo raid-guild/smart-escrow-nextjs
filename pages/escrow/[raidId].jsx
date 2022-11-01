@@ -102,8 +102,8 @@ export const getStaticProps = async (context) => {
   return {
     props: {
       raid: data.data.raid,
-      escrowValue: invoice ? invoice.total : '',
-      terminationTime: invoice ? invoice.terminationTime : ''
+      escrowValue: invoice ? invoice.total : null,
+      terminationTime: invoice ? invoice.terminationTime : null
     },
     revalidate: 1
   };
@@ -190,7 +190,7 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
 
   return (
     <Flex w='100%' h='100%' justifyContent='center'>
-      {raid && (
+      {escrowValue && (
         <Head>
           <title>{raid.raid_name}</title>
           <meta
