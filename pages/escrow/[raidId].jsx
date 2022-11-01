@@ -98,8 +98,8 @@ export const getStaticProps = async (context) => {
   return {
     props: {
       raid: data.data.raid,
-      escrowValue: invoice.total,
-      terminationTime: invoice.terminationTime
+      escrowValue: invoice ? invoice.total : null,
+      terminationTime: invoice ? invoice.terminationTime : null
     },
     revalidate: 1
   };
