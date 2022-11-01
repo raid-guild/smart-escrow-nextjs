@@ -193,14 +193,26 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
       {escrowValue && (
         <Head>
           <title>{raid.raid_name}</title>
+          <meta property='og:title' content={raid.raid_name} />
           <meta
             property='og:image'
             content={`https://smart-escrow-nextjs-git-develop-manolingam.vercel.app/api/og?projectName=${
               raid.raid_name
-            }&escrowValue=${utils.parseEther(
-              escrowValue
+            }&escrowValue=${Number(utils.formatEther(escrowValue)).toFixed(
+              0
             )}&safetyValveDate=${terminationTime}`}
           />
+          <meta name='twitter:card' content='summary_large_image' />
+          <meta name='twitter:title' content={raid.raid_name} />
+          <meta
+            name='twitter:image'
+            content={`https://smart-escrow-nextjs-git-develop-manolingam.vercel.app/api/og?projectName=${
+              raid.raid_name
+            }&escrowValue=${Number(utils.formatEther(escrowValue)).toFixed(
+              0
+            )}&safetyValveDate=${terminationTime}`}
+          />
+          <meta property='og:type' content='website' />
         </Head>
       )}
 
