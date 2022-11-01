@@ -195,7 +195,7 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
           <title>{raid.raid_name}</title>
           <meta
             property='og:image'
-            content={`https://smart-escrow-nextjs-git-develop-raidguild.vercel.app/api/og?projectName=${
+            content={`https://smart-escrow-nextjs-git-develop-manolingam.vercel.app/api/og?projectName=${
               raid.raid_name
             }&escrowValue=${utils.parseEther(
               escrowValue
