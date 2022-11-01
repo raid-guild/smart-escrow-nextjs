@@ -190,7 +190,7 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
 
   return (
     <Flex w='100%' h='100%' justifyContent='center'>
-      {invoice && (
+      {raid && (
         <Head>
           <title>{raid.raid_name}</title>
           <meta
