@@ -5,7 +5,7 @@ export const config = {
 };
 
 // Make sure the font exists in the specified path:
-const font = fetch(new URL('../../assets/spaceMono.TTF', import.meta.url)).then(
+const font = fetch(new URL('../../assets/spaceMono.ttf', import.meta.url)).then(
   (res) => res.arrayBuffer()
 );
 
