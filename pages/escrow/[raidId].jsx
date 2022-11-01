@@ -87,19 +87,23 @@ export const getStaticProps = async (context) => {
   );
 
   let invoice;
-  if (data.data.raid.invoice_address) {
-    let smartInvoice = await getSmartInvoiceAddress(
-      data.data.raid.invoice_address,
-      new ethers.providers.JsonRpcProvider(rpcUrls[100])
-    );
-    invoice = await getInvoice(100, smartInvoice);
+  try {
+    if (data.data.raid.invoice_address) {
+      let smartInvoice = await getSmartInvoiceAddress(
+        data.data.raid.invoice_address,
+        new ethers.providers.JsonRpcProvider(rpcUrls[100])
+      );
+      invoice = await getInvoice(100, smartInvoice);
+    }
+  } catch (e) {
+    console.log(e);
   }
 
   return {
     props: {
       raid: data.data.raid,
-      escrowValue: invoice.total,
-      terminationTime: invoice.terminationTime
+      escrowValue: invoice ? invoice.total : null,
+      terminationTime: invoice ? invoice.terminationTime : null
     },
     revalidate: 1
   };
@@ -186,17 +190,29 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
 
   return (
     <Flex w='100%' h='100%' justifyContent='center'>
-      {invoice && (
+      {escrowValue && (
         <Head>
           <title>{raid.raid_name}</title>
+          <meta property='og:title' content={raid.raid_name} />
           <meta
             property='og:image'
-            content={`https://smart-escrow-nextjs-git-develop-raidguild.vercel.app/api/og?projectName=${
+            content={`https://smart-escrow-nextjs-git-develop-manolingam.vercel.app/api/og?projectName=${
               raid.raid_name
-            }&escrowValue=${utils.parseEther(
-              escrowValue
+            }&escrowValue=${Number(utils.formatEther(escrowValue)).toFixed(
+              0
             )}&safetyValveDate=${terminationTime}`}
           />
+          <meta name='twitter:card' content='summary_large_image' />
+          <meta name='twitter:title' content={raid.raid_name} />
+          <meta
+            name='twitter:image'
+            content={`https://smart-escrow-nextjs-git-develop-manolingam.vercel.app/api/og?projectName=${
+              raid.raid_name
+            }&escrowValue=${Number(utils.formatEther(escrowValue)).toFixed(
+              0
+            )}&safetyValveDate=${terminationTime}`}
+          />
+          <meta property='og:type' content='website' />
         </Head>
       )}
 
