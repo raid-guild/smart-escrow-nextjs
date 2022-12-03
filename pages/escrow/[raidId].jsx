@@ -118,7 +118,7 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
 
   const [loading, setLoading] = useState(false);
   const [statusText, setStatusText] = useState(
-    'Invoice found for this Raid ID. Connect your wallet to fetch invoice information.'
+    'Connect your wallet to fetch invoice information.'
   );
 
   const [validRaid, setValidRaid] = useState(false);
@@ -179,8 +179,13 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
   };
 
   useEffect(() => {
-    if (context.invoice_id) {
-      getSmartInvoiceData();
+    if (Number(context.chainID) == 100) {
+      if (context.invoice_id) {
+        getSmartInvoiceData();
+      }
+    } else if (context.account !== '') {
+      setInvoiceFetchError(true);
+      setStatusText('Wrong network. Please switch to the correct network.');
     }
   }, [context.invoice_id, context.chainID]);
 
@@ -221,22 +226,12 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
           {context.account === '' && (
             <Flex direction='column' alignItems='center'>
               <Text variant='textOne'>{statusText}</Text>
-              <Button
-                w='350px'
-                variant='primary'
-                onClick={context.connectAccount}
-                isLoading={loading}
-              >
-                Connect Wallet
-              </Button>
             </Flex>
           )}
 
-          {!invoice && invoiceFetchError && (
-            <Text variant='textOne'>{statusText}</Text>
-          )}
+          {invoiceFetchError && <Text variant='textOne'>{statusText}</Text>}
 
-          {invoice && !loading && context.web3 && (
+          {invoice && !loading && Number(context.chainID) == 100 && (
             <Flex
               width='100%'
               direction={{ md: 'column', lg: 'row' }}

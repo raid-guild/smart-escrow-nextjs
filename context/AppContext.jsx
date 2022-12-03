@@ -96,7 +96,9 @@ class AppContextProvider extends Component {
         modalProvider.on('accountsChanged', (accounts) => {
           this.setState({ account: accounts[0] });
         });
-        modalProvider.on('chainChanged', (chainID) => {
+        modalProvider.on('chainChanged', async (chainID) => {
+          const modalProvider = await web3Modal.requestProvider();
+          await this.setWeb3Provider(modalProvider, true);
           this.setState({ chainID });
         });
       }
