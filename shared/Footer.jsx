@@ -17,7 +17,7 @@ export const Footer = () => {
         </Box>
       </Link>
       <Text mb='1rem' fontSize='sm' fontFamily={theme.fonts.jetbrains}>
-        DM.Version 0.1.1
+        DM.Version 2.0.0
       </Text>
     </Flex>
   );

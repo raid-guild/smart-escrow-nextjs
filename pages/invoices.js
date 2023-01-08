@@ -121,7 +121,7 @@ export default function Home() {
           <SimpleGrid columns='3' w='100%' my='2rem' gap='1rem'>
             {currentRecords.map((record, index) => {
               return (
-                <Link key={index} href={`/escrow/${record._id}`} passHref>
+                <Link key={index} href={`/escrow/${record.id}`} passHref>
                   <Flex
                     p='1rem'
                     fontFamily='spaceMono'
@@ -136,7 +136,7 @@ export default function Home() {
                     }}
                     my='5px'
                   >
-                    <Text>{record.raid_name}</Text>
+                    <Text>{record.name}</Text>
                   </Flex>
                 </Link>
               );

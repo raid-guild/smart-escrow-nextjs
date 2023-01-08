@@ -20,31 +20,36 @@ import {
 } from '../../utils/invoice';
 import { rpcUrls } from '../../utils/constants';
 import { Page404 } from '../../shared/Page404';
+import { DM_ENDPOINT, HASURA_SECRET } from '../../config';
+import {
+  ALL_RAIDS_QUERY,
+  RAID_BY_V2_ID_QUERY,
+  RAID_BY_V1_ID_QUERY
+} from '../../graphql/queries';
 
 export const getStaticPaths = async () => {
-  const query = `query fetchRaids { raids { _id } }`;
-
   const graphqlQuery = {
     operationName: 'fetchRaids',
-    query: query,
+    query: ALL_RAIDS_QUERY(),
     variables: {}
   };
 
-  const token = jwt.sign({}, process.env.JWT_SECRET);
-
-  const { data } = await axios.post(
-    `${process.env.DM_ENDPOINT}/graphql`,
-    graphqlQuery,
-    {
-      headers: {
-        authorization: 'Bearer ' + token
-      }
+  const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
+    headers: {
+      'x-hasura-admin-secret': HASURA_SECRET
     }
-  );
+  });
 
-  const paths = data.data.raids.map((raid) => {
+  let raidIds = [];
+
+  data.data.raids.map((raid) => {
+    raidIds.push(raid.id.toString());
+    raid.v1_id && raidIds.push(raid.v1_id.toString());
+  });
+
+  const paths = raidIds.map((id) => {
     return {
-      params: { raidId: raid._id.toString() }
+      params: { raidId: id }
     };
   });
 
@@ -54,43 +59,37 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async (context) => {
-  const { raidId } = context.params;
-
-  const query = `query validateRaidId { 
-    raid(_id: "${raidId}") { 
-    _id
-    invoice_address
-    raid_name
-    start_date
-    end_date
-    consultation {
-      contact_name
-    }
-}}`;
-
+const fetchRaid = async (query) => {
   const graphqlQuery = {
     operationName: 'validateRaidId',
     query: query,
     variables: {}
   };
 
-  const token = jwt.sign({}, process.env.JWT_SECRET, { expiresIn: 5 * 60 });
-  const { data } = await axios.post(
-    `${process.env.DM_ENDPOINT}/graphql`,
-    graphqlQuery,
-    {
-      headers: {
-        authorization: 'Bearer ' + token
-      }
+  const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
+    headers: {
+      'x-hasura-admin-secret': HASURA_SECRET
     }
-  );
+  });
+
+  return data.data.raids;
+};
+
+export const getStaticProps = async (context) => {
+  const { raidId } = context.params;
+
+  let raids;
+  raids = await fetchRaid(RAID_BY_V1_ID_QUERY(raidId));
+
+  if (raids.length == 0) {
+    raids = await fetchRaid(RAID_BY_V2_ID_QUERY(raidId));
+  }
 
   let invoice;
   try {
-    if (data.data.raid.invoice_address) {
+    if (raids[0].invoice_address) {
       let smartInvoice = await getSmartInvoiceAddress(
-        data.data.raid.invoice_address,
+        raids[0].invoice_address,
         new ethers.providers.JsonRpcProvider(rpcUrls[100])
       );
       invoice = await getInvoice(100, smartInvoice);
@@ -101,7 +100,7 @@ export const getStaticProps = async (context) => {
 
   return {
     props: {
-      raid: data.data.raid,
+      raid: raids ? raids[0] : null,
       escrowValue: invoice ? invoice.total : null,
       terminationTime: invoice ? invoice.terminationTime : null
     },
@@ -127,9 +126,10 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
     if (raid) {
       context.setDungeonMasterContext({
         invoice_id: raid.invoice_address,
-        raid_id: raid._id,
-        project_name: raid.raid_name,
-        client_name: raid.consultation.client_name,
+        v1_id: raid.v1_id,
+        raid_id: raid.id,
+        project_name: raid.name,
+        client_name: raid.consultation.consultations_contacts[0].contact.name,
         start_date: new Date(Number(raid.start_date)) || 'Not Specified',
         end_date: new Date(Number(raid.end_date)) || 'Not Specified',
         link_to_details: 'Not Specified',
@@ -208,7 +208,7 @@ export default function Escrow({ raid, escrowValue, terminationTime }) {
             )}&safetyValveDate=${terminationTime}`}
           />
           <meta name='twitter:card' content='summary_large_image' />
-          <meta name='twitter:title' content={raid.raid_name} />
+          <meta name='twitter:title' content={raid.name} />
           <meta
             name='twitter:image'
             content={`https://smartescrow.raidguild.org/api/og?projectName=${
