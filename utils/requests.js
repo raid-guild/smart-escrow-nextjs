@@ -5,8 +5,8 @@ export const allInvoices = async () => {
   return data;
 };
 
-export const validateRaidId = async (raidId, escrowVersion) => {
-  const { data } = await axios.post('/api/validate', { raidId, escrowVersion });
+export const validateRaidId = async (raidId) => {
+  const { data } = await axios.post('/api/validate', { raidId });
   return data;
 };
 

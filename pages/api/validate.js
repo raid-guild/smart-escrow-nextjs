@@ -2,6 +2,7 @@ import axios from 'axios';
 import { DM_ENDPOINT, HASURA_SECRET } from '../../config';
 import {
   RAID_BY_ID_QUERY,
+  RAID_BY_V1_ID_QUERY,
 } from '../../graphql/queries';
 
 const handler = async (req, res) => {
@@ -12,11 +13,20 @@ const handler = async (req, res) => {
   }
 
   if (req.method === 'POST') {
+
+    const v2Id = req.body.raidId.includes('-')
+    const variables = {}
+    if (v2Id) {
+      variables.raidId = req.body.raidId
+    } else {
+      variables.v1Id = req.body.raidId
+    }
+
     try {
       const graphqlQuery = {
         operationName: 'validateRaidId',
-        query: RAID_BY_ID_QUERY(req.body.raidId),
-        variables: {}
+        query: v2Id ? RAID_BY_ID_QUERY : RAID_BY_V1_ID_QUERY,
+        variables
       };
 
       const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
@@ -25,7 +35,7 @@ const handler = async (req, res) => {
         }
       });
 
-      res.status(201).json(data.data ? data.data.raids[0] : null);
+      res.status(201).json(data.data.raids?.[0] ? data.data.raids[0] : null);
     } catch (err) {
       console.error(err);
       res.status(500).json('Internal server error');

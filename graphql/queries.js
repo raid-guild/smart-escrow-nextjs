@@ -1,3 +1,5 @@
+import { gql } from "graphql-request";
+
 export const ALL_INVOICES_QUERY = () => `query allInvoices { 
     raids(where: {invoice_address: {_is_null: false}}) {
       id
@@ -12,7 +14,7 @@ export const ALL_INVOICES_QUERY = () => `query allInvoices {
 
 export const ALL_RAIDS_QUERY = () => `query fetchRaids { raids { id, v1_id } }`;
 
-const RAID_DETAILS_FRAGMENT = () => `
+const RAID_DETAILS_FRAGMENT = gql`
   fragment RaidDetails on raids {
     id
     v1_id
@@ -30,12 +32,18 @@ const RAID_DETAILS_FRAGMENT = () => `
   }
 `;
 
-export const RAID_BY_ID_QUERY = (raidId) => `
-  query validateRaidId { 
-    v1Raids: raids(where: {v1_id: {_eq: "${raidId}"}}) {
+export const RAID_BY_ID_QUERY = gql`
+  query validateRaidId($raidId: uuid) { 
+    raids(where: {id: {_eq: $raidId}}) {
       ...RaidDetails
     }
-    v2Raids: raids(where: {id: {_eq: "${raidId}"}}) {
+  }
+  ${RAID_DETAILS_FRAGMENT}
+`;
+
+export const RAID_BY_V1_ID_QUERY = gql`
+  query validateRaidId($v1Id: String) { 
+    raids(where: {v1_id: {_eq: $v1Id}}) {
       ...RaidDetails
     }
   }
