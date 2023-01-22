@@ -126,17 +126,6 @@ export default function Home() {
           ))}
       </HStack>
 
-      <Text fontFamily='jetbrains' color='white'>
-        Select your escrow version to query the RAID ID from
-      </Text>
-
-      <RadioBox
-        options={['Dungeon Master V1', 'Dungeon Master V2']}
-        updateRadio={setEscrowVersion}
-        name='escrowVersion'
-        defaultValue={escrowVersion}
-        value={escrowVersion}
-      />
       {/* <Flex
         direction='column'
         bgColor='white'
