@@ -23,7 +23,7 @@ import { Page404 } from '../../shared/Page404';
 import { DM_ENDPOINT, HASURA_SECRET } from '../../config';
 import {
   ALL_RAIDS_QUERY,
-  RAID_BY_V2_ID_QUERY,
+  RAID_BY_ID_QUERY,
   RAID_BY_V1_ID_QUERY
 } from '../../graphql/queries';
 
@@ -82,7 +82,7 @@ export const getStaticProps = async (context) => {
   raids = await fetchRaid(RAID_BY_V1_ID_QUERY(raidId));
 
   if (raids.length == 0) {
-    raids = await fetchRaid(RAID_BY_V2_ID_QUERY(raidId));
+    raids = await fetchRaid(RAID_BY_ID_QUERY(raidId));
   }
 
   let invoice;
