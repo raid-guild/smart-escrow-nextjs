@@ -1,7 +1,5 @@
 import { Flex, Heading, Box, Link, Text } from '@chakra-ui/react';
 
-import { theme } from '../theme/theme';
-
 export const ProjectInfo = ({ context }) => {
   return (
     <Flex direction='column' alignItems='flex-start'>
@@ -14,8 +12,7 @@ export const ProjectInfo = ({ context }) => {
       </Heading>
 
       <Box marginTop='15px' marginBottom='.7rem' fontFamily='jetbrains'>
-        <Text color='#a7a9be'>V1 Raid ID: {context.v1_id}</Text>
-        <Text color='#a7a9be'>V2 Raid ID: {context.raid_id}</Text>
+        <Text color='#a7a9be'>Raid ID: {context.v1_id || context.raid_id}</Text>
       </Box>
 
       {/* {context.link_to_details === 'Not Specified' && (

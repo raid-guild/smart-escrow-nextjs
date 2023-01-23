@@ -59,17 +59,15 @@ export const getStaticPaths = async () => {
   };
 };
 
-const fetchRaid = async (query) => {
+const fetchRaid = async (query, raidId) => {
   const graphqlQuery = {
     operationName: 'validateRaidId',
     query: query,
-    variables: {}
+    variables: { raidId }
   };
 
   const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
-    headers: {
-      'x-hasura-admin-secret': HASURA_SECRET
-    }
+    headers: { 'x-hasura-admin-secret': HASURA_SECRET }
   });
 
   return data.data.raids;
@@ -79,11 +77,23 @@ export const getStaticProps = async (context) => {
   const { raidId } = context.params;
 
   let raids;
-  raids = await fetchRaid(RAID_BY_V1_ID_QUERY(raidId));
-
-  if (raids.length == 0) {
-    raids = await fetchRaid(RAID_BY_ID_QUERY(raidId));
+  if (raidId.includes('-')) {
+    raids = await fetchRaid(RAID_BY_ID_QUERY, raidId);
+  } else {
+    raids = await fetchRaid(RAID_BY_V1_ID_QUERY, raidId);
   }
+
+  if (!raids || raids.length === 0) {
+    return {
+      props: {
+        raid: null,
+        escrowValue: null,
+        terminationTime: null
+      },
+      revalidate: 1
+    };
+  }
+
 
   let invoice;
   try {
