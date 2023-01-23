@@ -70,7 +70,7 @@ const fetchRaid = async (query, raidId) => {
     headers: { 'x-hasura-admin-secret': HASURA_SECRET }
   });
 
-  return data.data.raids;
+  return data.data?.raids;
 };
 
 export const getStaticProps = async (context) => {
