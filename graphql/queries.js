@@ -12,7 +12,7 @@ export const ALL_INVOICES_QUERY = () => `query allInvoices {
       }
     }}`;
 
-export const ALL_RAIDS_QUERY = () => `query fetchRaids { raids { id, v1_id } }`;
+export const ALL_RAIDS_QUERY = gql`query fetchRaids { raids { id, v1_id } }`;
 
 const RAID_DETAILS_FRAGMENT = gql`
   fragment RaidDetails on raids {

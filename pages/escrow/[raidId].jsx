@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Flex, Button, Text } from '@chakra-ui/react';
 import { ethers, utils } from 'ethers';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import Head from 'next/head';
 
@@ -30,7 +30,7 @@ import {
 export const getStaticPaths = async () => {
   const graphqlQuery = {
     operationName: 'fetchRaids',
-    query: ALL_RAIDS_QUERY(),
+    query: ALL_RAIDS_QUERY,
     variables: {}
   };
 
@@ -46,6 +46,7 @@ export const getStaticPaths = async () => {
     raidIds.push(raid.id.toString());
     raid.v1_id && raidIds.push(raid.v1_id.toString());
   });
+  console.log(raidIds.length)
 
   const paths = raidIds.map((id) => {
     return {
