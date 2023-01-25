@@ -1,4 +1,4 @@
-import { gql } from "graphql-request";
+import gql from "fake-tag";
 
 export const ALL_INVOICES_QUERY = () => `query allInvoices { 
     raids(where: {invoice_address: {_is_null: false}}) {

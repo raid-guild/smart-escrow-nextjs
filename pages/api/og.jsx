@@ -1,7 +1,7 @@
 import { ImageResponse } from '@vercel/og';
 
 export const config = {
-  runtime: 'edge'
+  runtime: 'experimental-edge'
 };
 
 // Make sure the font exists in the specified path:
