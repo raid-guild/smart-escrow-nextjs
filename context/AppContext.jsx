@@ -32,6 +32,7 @@ class AppContextProvider extends Component {
     chainID: '',
 
     //dungeon master info
+    v1_id: '',
     invoice_id: null,
     raid_id: '',
     project_name: '',

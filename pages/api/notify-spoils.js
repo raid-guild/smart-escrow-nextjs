@@ -1,5 +1,6 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { MINISTER_SENTRY_ENDPOINT } from '../../config';
 
 const handler = async (req, res) => {
   const { method } = req;
@@ -12,7 +13,7 @@ const handler = async (req, res) => {
     let { token, raidPartyShare, guildShare, txLink } = req.body;
     try {
       const { data } = await axios.post(
-        `${process.env.MINISTER_SENTRY_ENDPOINT}/escrow/notify-spoils`,
+        `${MINISTER_SENTRY_ENDPOINT}/escrow/notify-spoils`,
         {
           token,
           raidPartyShare,
