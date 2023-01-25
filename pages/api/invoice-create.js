@@ -1,5 +1,6 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
+import { DM_ENDPOINT } from '../../config';
+import { UPDATE_INVOICE_ADDRESS_QUERY } from '../../graphql/queries';
 
 const handler = async (req, res) => {
   const { method } = req;
@@ -10,18 +11,20 @@ const handler = async (req, res) => {
 
   if (req.method === 'POST') {
     try {
-      const token = jwt.sign({}, process.env.JWT_SECRET, { expiresIn: 5 * 60 });
-      const { data } = await axios.patch(
-        `${process.env.DM_ENDPOINT}/update/raid/${req.body.raidId}`,
-        {
-          invoice_address: req.body.invoiceAddress
-        },
-        {
-          headers: {
-            authorization: 'Bearer ' + token
-          }
+      const graphqlQuery = {
+        operationName: 'updateInvoiceAddress',
+        query: UPDATE_INVOICE_ADDRESS_QUERY(
+          req.body.raidId,
+          req.body.invoiceAddress
+        ),
+        variables: {}
+      };
+
+      const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
+        headers: {
+          'x-hasura-admin-secret': HASURA_SECRET
         }
-      );
+      });
 
       res.status(201).json(data.data);
     } catch (err) {

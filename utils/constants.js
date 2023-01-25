@@ -1,6 +1,7 @@
 import LexDAOLogo from '../assets/lex-dao.png';
 
-export const INFURA_ID = process.env.NEXT_PUBLIC_INFURA_ID;
+import { INFURA_ID } from '../config';
+
 export const IPFS_ENDPOINT = 'https://ipfs.infura.io';
 export const BOX_ENDPOINT = 'https://ipfs.3box.io';
 

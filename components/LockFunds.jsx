@@ -1,8 +1,8 @@
-import { Button, Flex, Heading, Link, Text, VStack } from '@chakra-ui/react';
+import { Button, Flex, Heading, Link, Text, VStack, Image } from '@chakra-ui/react';
 import { BigNumber, utils } from 'ethers';
 import React, { useCallback, useContext, useState } from 'react';
 
-import { ReactComponent as LockImage } from '../assets/lock.svg';
+import LockImage from '../assets/lock.svg';
 import { AppContext } from '../context/AppContext';
 
 import { AccountLink } from '../shared/AccountLink';
@@ -149,7 +149,7 @@ export const LockFunds = ({
             top="50%"
             transform="translate(-50%,-50%)"
           >
-            <LockImage width="2rem" />
+            <Image src={LockImage.src} width="2rem" alt='lock image' />
           </Flex>
         </Flex>
       </VStack>

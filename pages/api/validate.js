@@ -1,5 +1,9 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
+import { DM_ENDPOINT, HASURA_SECRET } from '../../config';
+import {
+  RAID_BY_ID_QUERY,
+  RAID_BY_V1_ID_QUERY,
+} from '../../graphql/queries';
 
 const handler = async (req, res) => {
   const { method } = req;
@@ -9,37 +13,29 @@ const handler = async (req, res) => {
   }
 
   if (req.method === 'POST') {
-    try {
-      const query = `query validateRaidId { 
-            raid(_id: "${req.body.raidId}") { 
-            _id
-            invoice_address
-            raid_name
-            start_date
-            end_date
-            consultation {
-              contact_name
-            }
-        }}`;
 
+    const v2Id = req.body.raidId.includes('-')
+    const variables = {}
+    if (v2Id) {
+      variables.raidId = req.body.raidId
+    } else {
+      variables.v1Id = req.body.raidId
+    }
+
+    try {
       const graphqlQuery = {
         operationName: 'validateRaidId',
-        query: query,
-        variables: {}
+        query: v2Id ? RAID_BY_ID_QUERY : RAID_BY_V1_ID_QUERY,
+        variables
       };
 
-      const token = jwt.sign({}, process.env.JWT_SECRET, { expiresIn: 5 * 60 });
-      const { data } = await axios.post(
-        `${process.env.DM_ENDPOINT}/graphql`,
-        graphqlQuery,
-        {
-          headers: {
-            authorization: 'Bearer ' + token
-          }
+      const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
+        headers: {
+          'x-hasura-admin-secret': HASURA_SECRET
         }
-      );
+      });
 
-      res.status(201).json(data.data.raid);
+      res.status(201).json(data.data.raids?.[0] ? data.data.raids[0] : null);
     } catch (err) {
       console.error(err);
       res.status(500).json('Internal server error');
