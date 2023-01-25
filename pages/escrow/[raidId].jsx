@@ -26,55 +26,59 @@ import {
   RAID_BY_ID_QUERY,
   RAID_BY_V1_ID_QUERY
 } from '../../graphql/queries';
+import { avoidRateLimit } from '../../utils/helpers';
 
-export const getStaticPaths = async () => {
-  const graphqlQuery = {
-    operationName: 'fetchRaids',
-    query: ALL_RAIDS_QUERY,
-    variables: {}
-  };
+// export const getStaticPaths = async () => {
+//   const graphqlQuery = {
+//     operationName: 'fetchRaids',
+//     query: ALL_RAIDS_QUERY,
+//     variables: {}
+//   };
 
-  const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
-    headers: {
-      'x-hasura-admin-secret': HASURA_SECRET
-    }
-  });
+//   const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
+//     headers: {
+//       'x-hasura-admin-secret': HASURA_SECRET
+//     }
+//   });
 
-  let raidIds = [];
+//   let raidIds = [];
 
-  data.data.raids.map((raid) => {
-    raidIds.push(raid.id.toString());
-    raid.v1_id && raidIds.push(raid.v1_id.toString());
-  });
-  console.log(raidIds.length)
+//   data.data.raids.map((raid) => {
+//     raidIds.push(raid.id.toString());
+//     raid.v1_id && raidIds.push(raid.v1_id.toString());
+//   });
+//   console.log(raidIds.length)
 
-  const paths = raidIds.map((id) => {
-    return {
-      params: { raidId: id }
-    };
-  });
+//   const paths = raidIds.map((id) => {
+//     return {
+//       params: { raidId: id }
+//     };
+//   });
 
-  return {
-    paths,
-    fallback: true
-  };
-};
+//   return {
+//     paths,
+//     fallback: true
+//   };
+// };
 
-const fetchRaid = async (query, raidId) => {
-  const graphqlQuery = {
-    operationName: 'validateRaidId',
-    query: query,
-    variables: { raidId }
-  };
+// const fetchRaid = async (query, raidId) => {
+//   console.log(raidId)
+//   await avoidRateLimit();
+//   const graphqlQuery = {
+//     operationName: 'validateRaidId',
+//     query: query,
+//     variables: { raidId: raidId }
+//   };
 
-  const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
-    headers: { 'x-hasura-admin-secret': HASURA_SECRET }
-  });
+//   const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
+//     headers: { 'x-hasura-admin-secret': HASURA_SECRET }
+//   });
+//   console.log(data)
 
-  return data.data?.raids;
-};
+//   return data.data?.raids;
+// };
 
-export const getStaticProps = async (context) => {
+export const getServerSideProps = async (context) => {
   const { raidId } = context.params;
 
   let raids;
