@@ -26,7 +26,6 @@ import {
   RAID_BY_ID_QUERY,
   RAID_BY_V1_ID_QUERY
 } from '../../graphql/queries';
-import { avoidRateLimit } from '../../utils/helpers';
 
 // export const getStaticPaths = async () => {
 //   const graphqlQuery = {
@@ -61,22 +60,19 @@ import { avoidRateLimit } from '../../utils/helpers';
 //   };
 // };
 
-// const fetchRaid = async (query, raidId) => {
-//   console.log(raidId)
-//   await avoidRateLimit();
-//   const graphqlQuery = {
-//     operationName: 'validateRaidId',
-//     query: query,
-//     variables: { raidId: raidId }
-//   };
+const fetchRaid = async (query, raidId) => {
+  const graphqlQuery = {
+    operationName: 'validateRaidId',
+    query: query,
+    variables: { raidId: raidId }
+  };
 
-//   const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
-//     headers: { 'x-hasura-admin-secret': HASURA_SECRET }
-//   });
-//   console.log(data)
+  const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
+    headers: { 'x-hasura-admin-secret': HASURA_SECRET }
+  });
 
-//   return data.data?.raids;
-// };
+  return data.data?.raids;
+};
 
 export const getServerSideProps = async (context) => {
   const { raidId } = context.params;
@@ -95,7 +91,7 @@ export const getServerSideProps = async (context) => {
         escrowValue: null,
         terminationTime: null
       },
-      revalidate: 1
+      // revalidate: 1
     };
   }
 
@@ -119,7 +115,7 @@ export const getServerSideProps = async (context) => {
       escrowValue: invoice ? invoice.total : null,
       terminationTime: invoice ? invoice.terminationTime : null
     },
-    revalidate: 1
+    // revalidate: 1
   };
 };
 
