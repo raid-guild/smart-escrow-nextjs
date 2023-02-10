@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Flex, Text, Link, Button, Heading, VStack } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { utils } from 'ethers';
 
 import { CopyIcon } from '../icons/CopyIcon';
@@ -17,12 +18,12 @@ export const EscrowSuccess = ({
   ethersProvider,
   tx,
   chainID,
-  raidID,
-  history
+  raidID,  
 }) => {
   const [wrappedInvoiceId, setWrappedInvoiceId] = useState('');
   const [smartInvoiceId, setSmartInvoiceId] = useState('');
   const [invoice, setInvoice] = useState();
+  const router = useRouter();
 
   const [progressText, updateProgressText] = useState('');
 
@@ -181,7 +182,7 @@ export const EscrowSuccess = ({
       <Button
         variant='primary'
         onClick={() => {
-          history.push(`/`);
+          router.push(`/`);
         }}
         mt='1rem'
       >

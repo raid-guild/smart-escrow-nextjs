@@ -22,7 +22,7 @@ const handler = async (req, res) => {
 
       const { data } = await axios.post(`${DM_ENDPOINT}`, graphqlQuery, {
         headers: {
-          'x-hasura-admin-secret': HASURA_SECRET
+          'x-hasura-admin-secret': process.env.HASURA_SECRET
         }
       });
 
