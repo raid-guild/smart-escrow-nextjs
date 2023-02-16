@@ -12,7 +12,7 @@ const handler = async (req, res) => {
   if (req.method === 'POST') {
     try {
       const graphqlQuery = {
-        operationName: 'updateInvoiceAddress',
+        // operationName: 'updateInvoiceAddress',
         query: UPDATE_INVOICE_ADDRESS_QUERY(
           req.body.raidId,
           req.body.invoiceAddress
