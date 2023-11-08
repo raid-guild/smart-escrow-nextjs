@@ -146,7 +146,7 @@ export const EscrowConfirmation = ({
         <Button
           variant='primary'
           w='100%'
-          isDisabled={isLoading}
+          isDisabled={true}
           onClick={createInvoice}
         >
           {isLoading ? 'Creating Escrow..' : 'Create Escrow'}
