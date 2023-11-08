@@ -87,8 +87,9 @@ export default function Home() {
 				flexDirection='column'
 				alignItems='center'
 				justifyContent='center'
-        color='blackLighter'
-				textAlign='center'>
+				color='blackLighter'
+				textAlign='center'
+				mb='1rem'>
 				<AlertIcon boxSize='40px' mr={0} />
 				<AlertTitle mt={4} mb={1} fontSize='lg'>
 					Heads Up!
